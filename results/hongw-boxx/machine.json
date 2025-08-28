@@ -1,0 +1,10 @@
+{
+    "arch": "x86_64",
+    "cpu": "AMD Ryzen Threadripper PRO 5975WX 32-Cores",
+    "gpu": "RTX PRO 6000 Blackwell 300W",
+    "machine": "hongw-boxx",
+    "num_cpu": "64",
+    "os": "Ubuntu 24.04",
+    "ram": "256GB",
+    "version": 1
+}

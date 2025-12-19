@@ -110,7 +110,7 @@
                 "256"
             ]
         ],
-        "setup_cache_key": "setup.bench_model:120",
+        "setup_cache_key": "setup.bench_model:125",
         "type": "peakmemory",
         "unit": "bytes",
         "version": "a7473dc081fbb914ac4fa9f1e7e5be2821d5847ec89f7cb912c05555ece87d4d"
@@ -137,7 +137,7 @@
         "repeat": 3,
         "rounds": 1,
         "sample_time": 0.01,
-        "setup_cache_key": "setup.bench_model:120",
+        "setup_cache_key": "setup.bench_model:125",
         "type": "time",
         "unit": "seconds",
         "version": "c443a475fe79ddf05a471ff6dd41b6902a1dca7225884afad7ab732c240e7119",
@@ -324,7 +324,7 @@
         "warmup_time": -1
     },
     "simulation.bench_mujoco.FastAllegro.time_simulate": {
-        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
+        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target_pos],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
         "min_run_count": 2,
         "name": "simulation.bench_mujoco.FastAllegro.time_simulate",
         "number": 1,
@@ -335,11 +335,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "13821b334a19fbc7b1a7333e1ef68506404d4e1fa9c7031bc46336537cea9c68",
+        "version": "98b9f7c46ab706d7f678e15627289fc532818b22d5fe7bf529ff7d54cb640a50",
         "warmup_time": -1
     },
     "simulation.bench_mujoco.FastCartpole.time_simulate": {
-        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
+        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target_pos],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
         "min_run_count": 2,
         "name": "simulation.bench_mujoco.FastCartpole.time_simulate",
         "number": 1,
@@ -350,11 +350,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "13821b334a19fbc7b1a7333e1ef68506404d4e1fa9c7031bc46336537cea9c68",
+        "version": "98b9f7c46ab706d7f678e15627289fc532818b22d5fe7bf529ff7d54cb640a50",
         "warmup_time": -1
     },
     "simulation.bench_mujoco.FastG1.time_simulate": {
-        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
+        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target_pos],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
         "min_run_count": 2,
         "name": "simulation.bench_mujoco.FastG1.time_simulate",
         "number": 1,
@@ -365,11 +365,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "13821b334a19fbc7b1a7333e1ef68506404d4e1fa9c7031bc46336537cea9c68",
+        "version": "98b9f7c46ab706d7f678e15627289fc532818b22d5fe7bf529ff7d54cb640a50",
         "warmup_time": -1
     },
     "simulation.bench_mujoco.FastHumanoid.time_simulate": {
-        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
+        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target_pos],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
         "min_run_count": 2,
         "name": "simulation.bench_mujoco.FastHumanoid.time_simulate",
         "number": 1,
@@ -380,11 +380,11 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "13821b334a19fbc7b1a7333e1ef68506404d4e1fa9c7031bc46336537cea9c68",
+        "version": "98b9f7c46ab706d7f678e15627289fc532818b22d5fe7bf529ff7d54cb640a50",
         "warmup_time": -1
     },
     "simulation.bench_mujoco.FastKitchenG1.time_simulate": {
-        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
+        "code": "class _FastBenchmark:\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            wp.capture_launch(self.graph)\n        wp.synchronize_device()\n\n    def setup(self):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = Example.create_model_builder(\n                self.robot, self.num_worlds, randomize=self.random_init, seed=123\n            )\n    \n        self.example = Example(\n            stage_path=None,\n            robot=self.robot,\n            randomize=self.random_init,\n            headless=True,\n            actuation=\"None\",\n            use_cuda_graph=True,\n            builder=self.builder,\n            environment=self.environment,\n        )\n    \n        wp.synchronize_device()\n    \n        # Recapture the graph with control application included\n        cuda_graph_comp = wp.get_device().is_cuda and wp.is_mempool_enabled(wp.get_device())\n        if not cuda_graph_comp:\n            raise SkipNotImplemented\n        else:\n            state = wp.rand_init(self.example.seed)\n            with wp.ScopedCapture() as capture:\n                wp.launch(\n                    apply_random_control,\n                    dim=(self.example.model.joint_dof_count,),\n                    inputs=[state],\n                    outputs=[self.example.control.joint_target_pos],\n                )\n                self.example.simulate()\n            self.graph = capture.graph\n    \n        wp.synchronize_device()",
         "min_run_count": 2,
         "name": "simulation.bench_mujoco.FastKitchenG1.time_simulate",
         "number": 1,
@@ -395,8 +395,38 @@
         "sample_time": 0.01,
         "type": "time",
         "unit": "seconds",
-        "version": "13821b334a19fbc7b1a7333e1ef68506404d4e1fa9c7031bc46336537cea9c68",
+        "version": "98b9f7c46ab706d7f678e15627289fc532818b22d5fe7bf529ff7d54cb640a50",
         "warmup_time": -1
+    },
+    "simulation.bench_mujoco.FastNewtonOverheadG1.track_simulate": {
+        "code": "class _NewtonOverheadBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def track_simulate(self, num_worlds):\n        trace = {}\n        with EventTracer(enabled=True) as tracer:\n            for _iter in range(self.samples):\n                example = Example(\n                    stage_path=None,\n                    robot=self.robot,\n                    randomize=self.random_init,\n                    headless=True,\n                    actuation=\"random\",\n                    num_worlds=num_worlds,\n                    use_cuda_graph=True,\n                    builder=self.builder[num_worlds],\n                    ls_iteration=self.ls_iteration,\n                )\n    \n                for _ in range(self.num_frames):\n                    example.step()\n                    trace = tracer.add_trace(trace, tracer.trace())\n    \n        step_time = trace[\"step\"][0]\n        mujoco_warp_step_time = trace[\"step\"][1][\"mujoco_warp_step\"][0]\n        overhead = 100.0 * (step_time - mujoco_warp_step_time) / step_time\n        return overhead\n\n    def setup(self, num_worlds):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = {}\n        if num_worlds not in self.builder:\n            self.builder[num_worlds] = Example.create_model_builder(\n                self.robot, num_worlds, randomize=self.random_init, seed=123\n            )",
+        "name": "simulation.bench_mujoco.FastNewtonOverheadG1.track_simulate",
+        "param_names": [
+            "num_worlds"
+        ],
+        "params": [
+            [
+                "256"
+            ]
+        ],
+        "type": "track",
+        "unit": "%",
+        "version": "f190c2aa963b9499b253447d6300eeff96be1d81b89c9e388d8ed69e4ae3d558"
+    },
+    "simulation.bench_mujoco.FastNewtonOverheadHumanoid.track_simulate": {
+        "code": "class _NewtonOverheadBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def track_simulate(self, num_worlds):\n        trace = {}\n        with EventTracer(enabled=True) as tracer:\n            for _iter in range(self.samples):\n                example = Example(\n                    stage_path=None,\n                    robot=self.robot,\n                    randomize=self.random_init,\n                    headless=True,\n                    actuation=\"random\",\n                    num_worlds=num_worlds,\n                    use_cuda_graph=True,\n                    builder=self.builder[num_worlds],\n                    ls_iteration=self.ls_iteration,\n                )\n    \n                for _ in range(self.num_frames):\n                    example.step()\n                    trace = tracer.add_trace(trace, tracer.trace())\n    \n        step_time = trace[\"step\"][0]\n        mujoco_warp_step_time = trace[\"step\"][1][\"mujoco_warp_step\"][0]\n        overhead = 100.0 * (step_time - mujoco_warp_step_time) / step_time\n        return overhead\n\n    def setup(self, num_worlds):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = {}\n        if num_worlds not in self.builder:\n            self.builder[num_worlds] = Example.create_model_builder(\n                self.robot, num_worlds, randomize=self.random_init, seed=123\n            )",
+        "name": "simulation.bench_mujoco.FastNewtonOverheadHumanoid.track_simulate",
+        "param_names": [
+            "num_worlds"
+        ],
+        "params": [
+            [
+                "256"
+            ]
+        ],
+        "type": "track",
+        "unit": "%",
+        "version": "f190c2aa963b9499b253447d6300eeff96be1d81b89c9e388d8ed69e4ae3d558"
     },
     "simulation.bench_mujoco.KpiAllegro.track_simulate": {
         "code": "class _KpiBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def track_simulate(self, num_worlds):\n        total_time = 0.0\n        for _iter in range(self.samples):\n            example = Example(\n                stage_path=None,\n                robot=self.robot,\n                randomize=self.random_init,\n                headless=True,\n                actuation=\"random\",\n                use_cuda_graph=True,\n                builder=self.builder[num_worlds],\n                ls_iteration=self.ls_iteration,\n                environment=self.environment,\n            )\n    \n            wp.synchronize_device()\n            for _ in range(self.num_frames):\n                example.step()\n            wp.synchronize_device()\n            total_time += example.benchmark_time\n    \n        return total_time * 1000 / (self.num_frames * example.sim_substeps * num_worlds * self.samples)\n\n    def setup(self, num_worlds):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = {}\n        if num_worlds not in self.builder:\n            self.builder[num_worlds] = Example.create_model_builder(\n                self.robot, num_worlds, randomize=self.random_init, seed=123\n            )",
@@ -475,6 +505,37 @@
         "unit": "ms/world-step",
         "version": "62a2fd707ff553505c8e26bae864c53867d55fc0442b3c6429ccc112ee6b21ad"
     },
+    "simulation.bench_mujoco.KpiNewtonOverheadG1.track_simulate": {
+        "code": "class _NewtonOverheadBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def track_simulate(self, num_worlds):\n        trace = {}\n        with EventTracer(enabled=True) as tracer:\n            for _iter in range(self.samples):\n                example = Example(\n                    stage_path=None,\n                    robot=self.robot,\n                    randomize=self.random_init,\n                    headless=True,\n                    actuation=\"random\",\n                    num_worlds=num_worlds,\n                    use_cuda_graph=True,\n                    builder=self.builder[num_worlds],\n                    ls_iteration=self.ls_iteration,\n                )\n    \n                for _ in range(self.num_frames):\n                    example.step()\n                    trace = tracer.add_trace(trace, tracer.trace())\n    \n        step_time = trace[\"step\"][0]\n        mujoco_warp_step_time = trace[\"step\"][1][\"mujoco_warp_step\"][0]\n        overhead = 100.0 * (step_time - mujoco_warp_step_time) / step_time\n        return overhead\n\n    def setup(self, num_worlds):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = {}\n        if num_worlds not in self.builder:\n            self.builder[num_worlds] = Example.create_model_builder(\n                self.robot, num_worlds, randomize=self.random_init, seed=123\n            )",
+        "name": "simulation.bench_mujoco.KpiNewtonOverheadG1.track_simulate",
+        "param_names": [
+            "num_worlds"
+        ],
+        "params": [
+            [
+                "8192"
+            ]
+        ],
+        "timeout": 900,
+        "type": "track",
+        "unit": "%",
+        "version": "f190c2aa963b9499b253447d6300eeff96be1d81b89c9e388d8ed69e4ae3d558"
+    },
+    "simulation.bench_mujoco.KpiNewtonOverheadHumanoid.track_simulate": {
+        "code": "class _NewtonOverheadBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def track_simulate(self, num_worlds):\n        trace = {}\n        with EventTracer(enabled=True) as tracer:\n            for _iter in range(self.samples):\n                example = Example(\n                    stage_path=None,\n                    robot=self.robot,\n                    randomize=self.random_init,\n                    headless=True,\n                    actuation=\"random\",\n                    num_worlds=num_worlds,\n                    use_cuda_graph=True,\n                    builder=self.builder[num_worlds],\n                    ls_iteration=self.ls_iteration,\n                )\n    \n                for _ in range(self.num_frames):\n                    example.step()\n                    trace = tracer.add_trace(trace, tracer.trace())\n    \n        step_time = trace[\"step\"][0]\n        mujoco_warp_step_time = trace[\"step\"][1][\"mujoco_warp_step\"][0]\n        overhead = 100.0 * (step_time - mujoco_warp_step_time) / step_time\n        return overhead\n\n    def setup(self, num_worlds):\n        if not hasattr(self, \"builder\") or self.builder is None:\n            self.builder = {}\n        if num_worlds not in self.builder:\n            self.builder[num_worlds] = Example.create_model_builder(\n                self.robot, num_worlds, randomize=self.random_init, seed=123\n            )",
+        "name": "simulation.bench_mujoco.KpiNewtonOverheadHumanoid.track_simulate",
+        "param_names": [
+            "num_worlds"
+        ],
+        "params": [
+            [
+                "8192"
+            ]
+        ],
+        "type": "track",
+        "unit": "%",
+        "version": "f190c2aa963b9499b253447d6300eeff96be1d81b89c9e388d8ed69e4ae3d558"
+    },
     "simulation.bench_quadruped_xpbd.FastExampleQuadrupedXPBD.time_simulate": {
         "code": "class FastExampleQuadrupedXPBD:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def time_simulate(self):\n        for _ in range(self.num_frames):\n            self.example.step()\n        wp.synchronize_device()\n\n    def setup(self):\n        self.num_frames = 1000\n        self.example = Example(newton.viewer.ViewerNull(num_frames=self.num_frames), 200)",
         "min_run_count": 2,
@@ -503,6 +564,64 @@
         "type": "time",
         "unit": "seconds",
         "version": "adc93f1285ec796ed3088445a10636624dd2a89b99b5c90bcbb42add8c9087df",
+        "warmup_time": -1
+    },
+    "simulation.bench_tiled_camera_sensor.TiledCameraSensorBenchmark.time_rendering_pixel": {
+        "code": "class TiledCameraSensorBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def time_rendering_pixel(self, resolution: int, num_worlds: int, iterations: int):\n        self.tiled_camera_sensor.render_context.tile_rendering = False\n        with wp.ScopedTimer(\"Rendering\", synchronize=True, print=True) as timer:\n            for _ in range(iterations):\n                self.tiled_camera_sensor.render(\n                    None,\n                    self.camera_transforms,\n                    self.camera_rays,\n                    self.color_image,\n                    self.depth_image,\n                    refit_bvh=False,\n                    clear_data=None,\n                )\n        self.timings[\"render_pixel\"] = timer.elapsed\n\n    def setup(self, resolution: int, num_worlds: int, iterations: int):\n        self.timings = {}\n    \n        franka = newton.ModelBuilder()\n        franka.add_urdf(\n            newton.utils.download_asset(\"franka_emika_panda\") / \"urdf/fr3_franka_hand.urdf\",\n            floating=False,\n        )\n    \n        scene = newton.ModelBuilder()\n        scene.replicate(franka, num_worlds)\n        scene.add_ground_plane()\n    \n        self.model = scene.finalize()\n        self.state = self.model.state()\n        newton.eval_fk(self.model, self.model.joint_q, self.model.joint_qd, self.state)\n    \n        self.camera_transforms = wp.array(\n            [\n                [\n                    wp.transformf(\n                        wp.vec3f(2.4, 0.0, 0.8),\n                        wp.quatf(0.4187639653682709, 0.4224344491958618, 0.5708873867988586, 0.5659270882606506),\n                    )\n                ]\n                * num_worlds\n            ],\n            dtype=wp.transformf,\n        )\n    \n        self.tiled_camera_sensor = TiledCameraSensor(\n            model=self.model,\n            num_cameras=1,\n            width=resolution,\n            height=resolution,\n            options=TiledCameraSensor.Options(default_light=True, colors_per_shape=True, checkerboard_texture=True),\n        )\n        self.camera_rays = self.tiled_camera_sensor.compute_pinhole_camera_rays(math.radians(45.0))\n        self.color_image = self.tiled_camera_sensor.create_color_image_output()\n        self.depth_image = self.tiled_camera_sensor.create_depth_image_output()\n    \n        self.tiled_camera_sensor.update_from_state(self.state)\n    \n        with wp.ScopedTimer(\"Refit BVH\", synchronize=True, print=False) as timer:\n            self.tiled_camera_sensor.render_context.refit_bvh()\n        self.timings[\"refit\"] = timer.elapsed\n    \n        for _ in range(iterations):\n            self.tiled_camera_sensor.render(\n                None,\n                self.camera_transforms,\n                self.camera_rays,\n                self.color_image,\n                self.depth_image,\n                refit_bvh=False,\n            )",
+        "min_run_count": 2,
+        "name": "simulation.bench_tiled_camera_sensor.TiledCameraSensorBenchmark.time_rendering_pixel",
+        "number": 0,
+        "param_names": [
+            "resolution",
+            "num_worlds",
+            "iterations"
+        ],
+        "params": [
+            [
+                "64"
+            ],
+            [
+                "4096"
+            ],
+            [
+                "50"
+            ]
+        ],
+        "repeat": 0,
+        "rounds": 2,
+        "sample_time": 0.01,
+        "type": "time",
+        "unit": "seconds",
+        "version": "146ccd8caf5887fa97a4822af03c6431a721dded1c5b5d9de3f786f64aa532c0",
+        "warmup_time": -1
+    },
+    "simulation.bench_tiled_camera_sensor.TiledCameraSensorBenchmark.time_rendering_tiled": {
+        "code": "class TiledCameraSensorBenchmark:\n    @skip_benchmark_if(wp.get_cuda_device_count() == 0)\n    def time_rendering_tiled(self, resolution: int, num_worlds: int, iterations: int):\n        self.tiled_camera_sensor.render_context.tile_rendering = True\n        self.tiled_camera_sensor.render_context.tile_size = 8\n        with wp.ScopedTimer(\"Tiled Rendering\", synchronize=True, print=False) as timer:\n            for _ in range(iterations):\n                self.tiled_camera_sensor.render(\n                    None,\n                    self.camera_transforms,\n                    self.camera_rays,\n                    self.color_image,\n                    self.depth_image,\n                    refit_bvh=False,\n                    clear_data=None,\n                )\n        self.timings[\"render_tiled\"] = timer.elapsed\n\n    def setup(self, resolution: int, num_worlds: int, iterations: int):\n        self.timings = {}\n    \n        franka = newton.ModelBuilder()\n        franka.add_urdf(\n            newton.utils.download_asset(\"franka_emika_panda\") / \"urdf/fr3_franka_hand.urdf\",\n            floating=False,\n        )\n    \n        scene = newton.ModelBuilder()\n        scene.replicate(franka, num_worlds)\n        scene.add_ground_plane()\n    \n        self.model = scene.finalize()\n        self.state = self.model.state()\n        newton.eval_fk(self.model, self.model.joint_q, self.model.joint_qd, self.state)\n    \n        self.camera_transforms = wp.array(\n            [\n                [\n                    wp.transformf(\n                        wp.vec3f(2.4, 0.0, 0.8),\n                        wp.quatf(0.4187639653682709, 0.4224344491958618, 0.5708873867988586, 0.5659270882606506),\n                    )\n                ]\n                * num_worlds\n            ],\n            dtype=wp.transformf,\n        )\n    \n        self.tiled_camera_sensor = TiledCameraSensor(\n            model=self.model,\n            num_cameras=1,\n            width=resolution,\n            height=resolution,\n            options=TiledCameraSensor.Options(default_light=True, colors_per_shape=True, checkerboard_texture=True),\n        )\n        self.camera_rays = self.tiled_camera_sensor.compute_pinhole_camera_rays(math.radians(45.0))\n        self.color_image = self.tiled_camera_sensor.create_color_image_output()\n        self.depth_image = self.tiled_camera_sensor.create_depth_image_output()\n    \n        self.tiled_camera_sensor.update_from_state(self.state)\n    \n        with wp.ScopedTimer(\"Refit BVH\", synchronize=True, print=False) as timer:\n            self.tiled_camera_sensor.render_context.refit_bvh()\n        self.timings[\"refit\"] = timer.elapsed\n    \n        for _ in range(iterations):\n            self.tiled_camera_sensor.render(\n                None,\n                self.camera_transforms,\n                self.camera_rays,\n                self.color_image,\n                self.depth_image,\n                refit_bvh=False,\n            )",
+        "min_run_count": 2,
+        "name": "simulation.bench_tiled_camera_sensor.TiledCameraSensorBenchmark.time_rendering_tiled",
+        "number": 0,
+        "param_names": [
+            "resolution",
+            "num_worlds",
+            "iterations"
+        ],
+        "params": [
+            [
+                "64"
+            ],
+            [
+                "4096"
+            ],
+            [
+                "50"
+            ]
+        ],
+        "repeat": 0,
+        "rounds": 2,
+        "sample_time": 0.01,
+        "type": "time",
+        "unit": "seconds",
+        "version": "e4da2d7a50edc358d7f48b97e5cf96d8831e1bd45380c9a3d71749a5a2c67b5e",
         "warmup_time": -1
     },
     "simulation.bench_viewer.FastViewerGL.time_rendering_frame": {
